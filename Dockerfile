@@ -5,7 +5,11 @@ MAINTAINER LargoUsagi
 ARG FTS_VERSION=1.1.2
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl python3 python3-pip python3-dev python3-setuptools build-essential netbase libxml2-dev libxslt-dev libffi-dev python3-gevent python3-lxml && \
+    apt-get install -y --no-install-recommends curl python3 python3-pip python3-dev python3-setuptools build-essential netbase libxml2-dev libxslt-dev libffi-dev python3-gevent python3-lxml curl apt-transport-https lsb-release gnupg2 && \
+    curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add - && \
+    echo "deb https://packages.wazuh.com/3.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list && \
+    apt-get update && \
+    WAZUH_MANAGER="172.19.0.4" apt-get install wazuh-agent && \
     pip3 install wheel && \
     pip3 install FreeTAKServer==${FTS_VERSION} && \
     pip3 check FreeTakServer && \
